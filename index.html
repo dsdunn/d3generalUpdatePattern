@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>title</title>
+  </head>
+  <style type="text/css">
+    text {
+      font: bold 48px monospace;
+    }
+
+    .enter {
+      fill: green;
+    }
+
+    .update {
+      fill: #333;
+    }
+
+  </style>
+  <body>
+    <button id="button">Click Me!</button>
+    <svg width="960" height="500"></svg>
+  </body>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script type="text/javascript">
+    let alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+    let svg = d3.select('svg'),
+        width = +svg.attr('width'),
+        height = +svg.attr('height'),
+        g = svg.append('g').attr('transform', 'translate(32,' + (height / 2) + ')');
+
+    const update = (data) => {
+
+      const text = g.selectAll('text')
+        .data(data);
+
+      text.attr('class', 'update');
+
+      text.enter().append('text')
+          .attr('class', 'enter')
+          .attr('x', function(d,i) { return i * 32; })
+          .attr('dy', '.35em')
+        .merge(text)
+          .text(function(d) { return d; });
+
+      text.exit().remove();
+    }
+
+    update(alphabet);
+
+    // d3.interval(function() {
+    //   update(d3.shuffle(alphabet)
+    //     .slice(0, Math.floor(Math.random() * 26))
+    //     .sort());
+    // }, 1500);
+
+    document.querySelector('#button').addEventListener('click', () => {
+      update(d3.shuffle(alphabet)
+        .slice(0, Math.floor(Math.random() * 26))
+        .sort());
+    })
+
+  </script>
+</html>
+
+
+
